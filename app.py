@@ -183,7 +183,7 @@ FONT_CLR  = "#94a3b8"
 
 def base_layout(**kwargs):
     return dict(
-        /* paper_bgcolor=PAPER_BG */
+        paper_bgcolor=PAPER_BG,
         plot_bgcolor=PLOT_BG,
         font=dict(color=FONT_CLR, family="Inter, sans-serif"),
         xaxis=dict(gridcolor=GRID_CLR, linecolor="rgba(255,255,255,0.1)", tickfont=dict(size=11)),
