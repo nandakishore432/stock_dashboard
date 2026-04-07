@@ -14,11 +14,11 @@ st.caption(f'Auto-refreshes every 30 minutes. Last run: {pd.Timestamp.now().strf
 with st.sidebar:
     st.header('Controls')
     selected = st.multiselect('Select Tickers', TICKERS, default=['AAPL','MSFT','TSLA'])
-    period   = st.selectbox('Period', ['7d','14d','30d','90d'], index=2)
-    interval = st.selectbox('Interval', ['1d','1h','5m'], index=0)
+    period   = st.selectbox('Window', ['7d','14d','30d','90d'], index=2)
+    interval = st.selectbox('Timefrmae', ['1d','1h','5m'], index=0)
     refresh  = st.slider('Auto-refresh (min)', 5, 60, 30)
     st.divider()
-    st.caption('Data: Yahoo Finance (yfinance)')
+    st.caption('Data Source: Yahoo Finance (yfinance)')
 
 # ── Load Data ────────────────────────────────────────────────────────
 @st.cache_data(ttl=refresh*60)
