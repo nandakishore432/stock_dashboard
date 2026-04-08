@@ -47,51 +47,15 @@ for i, sym in enumerate(selected):
 st.divider()
 
 # ── Chart 1: Line — 30-Day Price Trend ───────────────────────────────
-#st.subheader('30-Day Closing Price Trend')
-#fig_line = go.Figure()
-#for sym in selected:
-    #df = data[sym]
-   # fig_line.add_trace(go.Scatter(x=df.index, y=df['Close'], mode='lines', name=sym))
-  #  fig_line.add_trace(go.Scatter(x=df.index, y=df['7D_Avg'], mode='lines',
- #       name=f'{sym} 7D Avg', line=dict(dash='dot', width=1)))
-#fig_line.update_layout(hovermode='x unified', height=380)
-#st.plotly_chart(fig_line, use_container_width=True)
-
-# 1. Create a styled container for the rounded border
-with st.container(border=True):
-    st.subheader('30-Day Closing Price Trend')
-    
-    fig_line = go.Figure()
-    
-    for sym in selected:
-        df = data[sym]
-        # Main Line
-        fig_line.add_trace(go.Scatter(
-            x=df.index, y=df['Close'], 
-            mode='lines', 
-            name=sym
-        ))
-        # 7D Average Line
-        fig_line.add_trace(go.Scatter(
-            x=df.index, y=df['7D_Avg'], 
-            mode='lines', 
-            name=f'{sym} 7D Avg', 
-            line=dict(dash='dot', width=1)
-        ))
-
-    # 2. Add background colors and clean up layout
-    fig_line.update_layout(
-        template="plotly_white",        # Modern, clean white background
-        paper_bgcolor="rgba(0,0,0,0)",  # Transparent paper (lets container color show)
-        plot_bgcolor="#f8f9fa",         # Light grey background inside the plot area
-        hovermode='x unified', 
-        height=380,
-        margin=dict(l=20, r=20, t=20, b=20), # Adjust margins for better fit
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-    )
-
-    st.plotly_chart(fig_line, use_container_width=True)
-
+st.subheader('30-Day Closing Price Trend')
+fig_line = go.Figure()
+for sym in selected:
+    df = data[sym]
+    fig_line.add_trace(go.Scatter(x=df.index, y=df['Close'], mode='lines', name=sym))
+    fig_line.add_trace(go.Scatter(x=df.index, y=df['7D_Avg'], mode='lines',
+        name=f'{sym} 7D Avg', line=dict(dash='dot', width=1)))
+fig_line.update_layout(hovermode='x unified', height=380)
+st.plotly_chart(fig_line, use_container_width=True)
 
 # ── Chart 2: Candlestick — OHLC ──────────────────────────────────────
 st.subheader('Candlestick Chart (OHLC)')
