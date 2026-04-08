@@ -25,7 +25,13 @@ STOCK_COLORS = {
 # ── Page Config ──────────────────────────────────────────────────────
 st.set_page_config(page_title='Stock Dashboard', layout='wide', page_icon='📈')
 st.title('📈 Live Stock Price Dashboard')
-st.caption(f'Auto-refreshes every 30 minutes. Last run: {pd.Timestamp.now().strftime("%H:%M:%S")}')
+# ── Dynamic Timezone Logic ──────────────────────────────────────────
+tz = pytz.timezone('Asia/Kolkata') 
+now_time = pd.Timestamp.now(tz=tz).strftime("%H:%M:%S")
+
+st.caption(f'🚀 Last updated: {now_time} (IST) | Auto-refreshes every {refresh} min')
+# ────────────────────────────────────────────────────────────────────
+#st.caption(f'Auto-refreshes every 30 minutes. Last run: {pd.Timestamp.now().strftime("%H:%M:%S")}')
 
 # ── The "No-Fail" CSS ────────────────────────────────────────────────
 # This targets Streamlit's internal div structure directly
