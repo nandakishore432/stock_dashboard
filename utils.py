@@ -1,32 +1,32 @@
 import yfinance as yf
 import pandas as pd
 
-TICKERS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA']
+TICKERS = ['AAPL', 'MSFT', 'TSLA', 'GOOGL', 'AMZN', 'META', 'NVDA', 'NFLX']
 
-def get_stock_data(symbol: str, period: str = '30d', interval: str = '1d') -> pd.DataFrame:
-    """Fetch OHLCV data from Yahoo Finance via yfinance."""
-    ticker = yf.Ticker(symbol)
-    df = ticker.history(period=period, interval=interval)
-    df.index = pd.to_datetime(df.index).tz_localize(None)
-    df['Symbol'] = symbol
+def get_stock_data(ticker: str, period: str = '30d', interval: str = '1d') -> pd.DataFrame:
+    df = yf.download(ticker, period=period, interval=interval, progress=False, auto_adjust=True)
+
+    # ✅ Fix 1: Flatten MultiIndex columns (yfinance >= 0.2.x)
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+
+    # ✅ Fix 2: Drop rows with no Close price
+    df = df.dropna(subset=['Close'])
+
+    # ✅ Fix 3: Add Symbol column for concat in charts
+    df['Symbol'] = ticker
+    df.index.name = 'Date'
+
+    # ✅ Fix 4: Compute derived columns with min_periods=1 to avoid NaN
     df['Daily_Return'] = df['Close'].pct_change() * 100
-    df['7D_Avg'] = df['Close'].rolling(7).mean()
-    df['Volatility'] = df['Close'].rolling(7).std()
+    df['Volatility'] = df['Daily_Return'].rolling(7, min_periods=1).std()
+    df['7D_Avg'] = df['Close'].rolling(7, min_periods=1).mean()
+
     return df
 
-def get_info(symbol: str) -> dict:
-    """Fetch static info: market cap, sector, etc."""
-    return yf.Ticker(symbol).info
 
-def build_date_table(df: pd.DataFrame) -> pd.DataFrame:
-    """Creates a Date dimension table from the index."""
-    dates = df.index.unique()
-    return pd.DataFrame({
-        'Date':       dates,
-        'Year':       dates.year,
-        'Month':      dates.strftime('%b %Y'),
-        'Week':       dates.isocalendar().week.values,
-        'DayOfWeek':  dates.strftime('%a'),
-        'Quarter':    dates.quarter,
-        'IsWeekday':  dates.weekday < 5
-    })
+def get_info(ticker: str) -> dict:
+    try:
+        return yf.Ticker(ticker).info
+    except Exception:
+        return {}
