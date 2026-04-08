@@ -58,7 +58,7 @@ st.set_page_config(page_title='Stock Dashboard', layout='wide',  initial_sidebar
 # ── Global CSS ────────────────────────────────────────────────────────
 st.markdown(
 <style>
-/* ── Base card: thick black rounded border ──────────────────────────── */
+/* Base card: thick black rounded border ──────────────────────────── */
 .chart-card {
     border: 2.5px solid #000000;
     border-radius: 14px;
