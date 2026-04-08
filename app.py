@@ -84,22 +84,87 @@ def load_all(tickers, period, interval):
 with st.spinner('Fetching live data...'):
     data = load_all(tuple(selected), period, interval)
 
-# ── KPI Row ──────────────────────────────────────────────────────────
+# ── KPI Section Header ────────────────────────────────────────────────
+st.markdown(
+    """
+    <div style="
+        background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+        padding: 15px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        text-align: center;
+    ">
+        <h1 style="
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            font-weight: 800; 
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 1.8rem;
+        ">
+            📌 Live Market Updates
+        </h1>
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
+
+# ── KPI Row Logic ─────────────────────────────────────────────────────
 kpi_cols = st.columns(len(selected))
+
 for i, sym in enumerate(selected):
-    df  = data[sym]
+    df = data[sym]
+    if df.empty:
+        continue
+        
+    # Data Extraction
     cur = df['Close'].iloc[-1]
     prv = df['Close'].iloc[-2]
     chg = cur - prv
-    pct = chg / prv * 100
-    vol = df['Volatility'].iloc[-1]
-    kpi_cols[i].metric(
-        label=sym,
-        value=f'${cur:.2f}',
-        delta=f'{chg:+.2f} ({pct:+.2f}%)',
-        delta_color='normal'
-    )
+    pct = (chg / prv) * 100
+    hi  = df['High'].max()
+    lo  = df['Low'].min()
+    vol = df['Volume'].iloc[-1]
+    
+    # Logic for Colors and Symbols
+    color = "#27ae60" if chg >= 0 else "#e74c3c"  # Professional Green/Red
+    symbol = "▲" if chg >= 0 else "▼"
+    
+    # Fetch Market Cap
+    try:
+        mkt_cap = yf.Ticker(sym).info.get('marketCap', 0)
+        mkt_cap_str = f"{mkt_cap / 1e9:.2f}B" if mkt_cap > 1e9 else f"{mkt_cap / 1e6:.2f}M"
+    except:
+        mkt_cap_str = "N/A"
 
+    # ── Individual KPI Cards ──────────────────────────────────────────
+    kpi_cols[i].markdown(
+        f"""
+        <div style="
+            background-color: #f3e5f5; 
+            border: 3px solid #2c3e50; 
+            border-radius: 12px; 
+            padding: 15px; 
+            text-align: center;
+            box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+        ">
+            <h3 style="margin: 0; color: #1a1a2e; font-size: 1.2rem;">{sym}</h3>
+            <div style="font-size: 1.6rem; font-weight: 800; margin: 5px 0; color: #1a1a2e;">${cur:.2f}</div>
+            <div style="color: {color}; font-weight: 700; font-size: 1.1rem; margin-bottom: 10px;">
+                {symbol} {abs(chg):.2f} ({abs(pct):.2f}%)
+            </div>
+            <div style="text-align: left; font-size: 0.85rem; line-height: 1.8; border-top: 1px solid #d1c4e9; pt: 8px;">
+                <div style="display: flex; justify-content: space-between;"><b>High:</b> <span>${hi:.2f}</span></div>
+                <div style="display: flex; justify-content: space-between;"><b>Low:</b> <span>${lo:.2f}</span></div>
+                <div style="display: flex; justify-content: space-between;"><b>Volume:</b> <span>{vol/1e6:.1f}M</span></div>
+                <div style="display: flex; justify-content: space-between;"><b>Mkt Cap:</b> <span>{mkt_cap_str}</span></div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 st.divider()
 
 # ── Chart 1: Line — 30-Day Price Trend ───────────────────────────────
