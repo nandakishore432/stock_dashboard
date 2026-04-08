@@ -111,6 +111,12 @@ fig_cs = go.Figure(go.Candlestick(
     low=df_cs['Low'], close=df_cs['Close'], name=cs_sym),
 )
 fig_cs.update_layout(xaxis_rangeslider_visible=False, height=360)
+fig_cs.update_layout(
+    height=400,
+    paper_bgcolor='#FFFFFF',
+    plot_bgcolor='#F0F2F6',
+    margin=dict(l=10, r=10, t=10, b=10)
+)
 st.plotly_chart(fig_cs, use_container_width=True)
 
 # ── Charts Row: Bar + Scatter ─────────────────────────────────────────
