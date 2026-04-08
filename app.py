@@ -238,17 +238,82 @@ for sym in selected:
 fig_area.update_layout(height=300)
 st.plotly_chart(fig_area, use_container_width=True)
 
-# ── Chart: Heatmap — Weekly Return ───────────────────────────────────
-st.subheader('Return Heatmap (by Day)')
-hm_sym = st.selectbox('Ticker for heatmap', selected, key='hm')
-df_hm = data[hm_sym].copy()
-df_hm['DayName'] = df_hm.index.strftime('%a')
-df_hm['Week']    = df_hm.index.isocalendar().week.values
-pivot = df_hm.pivot_table(values='Daily_Return', index='DayName', columns='Week', aggfunc='mean')
-fig_hm = px.imshow(pivot, color_continuous_scale='RdYlGn', aspect='auto',
-                   labels={'color':'Return %'})
-fig_hm.update_layout(height=280)
-st.plotly_chart(fig_hm, use_container_width=True)
+# ── Chart: Heatmap — Weekly Return ────────────────────────────────────
+# 1. Custom Styled Card & Background
+st.markdown('<div class="chart-card card-heatmap">', unsafe_allow_html=True)
+
+# 2. Icon + Gradient Title (Matched to "Live Updates" Style)
+st.markdown(
+    """
+    <div style="
+        background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        text-align: center;
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 15px;
+    ">
+        <img src="data:image/png;base64,...YOUR_BASE64_ICON_HERE..." style="width: 40px; border-radius: 5px;" alt="Heatmap Icon">
+        <h2 style="
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            font-weight: 800; 
+            letter-spacing: 1.5px;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 1.6rem;
+        ">
+            RETURN HEATMAP (BY DAY)
+        </h2>
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
+
+# Selector & Data Loading
+hm_sym = st.selectbox('Select Ticker focus', selected, key='hm')
+df_hm  = data[hm_sym].copy()
+
+# Ensure we have data and it's indexed properly
+if not df_hm.empty:
+    df_hm['DayName'] = df_hm.index.strftime('%a')
+    df_hm['Week']    = df_hm.index.isocalendar().week.values
+    
+    pivot = df_hm.pivot_table(
+        values='Daily_Return', 
+        index='DayName', 
+        columns='Week', 
+        aggfunc='mean'
+    )
+    
+    # 3. New Color Palette & Custom Styling
+    # Changing 'RdYlGn' to a modern palette like 'Cividis' (or 'Plasma', 'Inferno')
+    fig_hm = px.imshow(
+        pivot, 
+        color_continuous_scale='Cividis', 
+        aspect='auto',
+        labels={'color': 'Mean Return %'}
+    )
+    
+    # Matching the Plotly layout to the container style
+    fig_hm.update_layout(
+        height=300,
+        margin=dict(l=0, r=0, t=10, b=0),
+        paper_bgcolor='rgba(0,0,0,0)',  # Makes plot background transparent
+        plot_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    # 4. Final Display inside styled container
+    st.plotly_chart(fig_hm, use_container_width=True)
+else:
+    st.warning(f'No data available to build a heatmap for {hm_sym}.')
+
+st.markdown('</div>', unsafe_allow_html=True)
+
 # ── Anomaly Alerts Section ────────────────────────────────────────────
 st.markdown('<div class="chart-card card-anomaly">', unsafe_allow_html=True)
 
