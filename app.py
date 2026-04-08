@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 import time
+import pytz
 from utils import get_stock_data, get_info, TICKERS
 
 # ── Classic font & color theme ─────────────────────────────
