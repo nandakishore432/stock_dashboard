@@ -185,6 +185,13 @@ if alerts:
 else:
     st.success('No anomalies detected in the selected period.')
 
+st.divider()
+st.markdown(
+    f"<p style='text-align:center;font-family:{CLASSIC_FONT};color:#555;font-size:13px;'>"
+    "Data via Yahoo Finance (yfinance) · No API key required · "
+    "Built with Streamlit & Plotly</p>",
+    unsafe_allow_html=True,
+)
 # ── Auto-refresh ──────────────────────────────────────────────────────
 st.divider()
 if st.button('🔄 Refresh Now'):
