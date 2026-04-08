@@ -70,7 +70,7 @@ st.markdown(
 # ── KPI metric containers: individual black border ────────────────── 
 
   div[data-testid="metric-container"] {
-    border: 2.5px solid #000000 !important;
+    border: 2px solid #000000 !important;
     border-radius: 12px !important;
     padding: 14px 20px !important;
     background-color: #ffffff;
