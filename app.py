@@ -67,8 +67,9 @@ st.markdown(
 .card-heatmap { background-color: #fffde7; }  /* golden     – heatmap        */
 .card-anomaly { background-color: #fce8e8; }  /* blush red  – anomaly alerts */
 
-/* ── KPI metric containers: individual black border ────────────────── */
-div[data-testid="metric-container"] {
+# ── KPI metric containers: individual black border ────────────────── 
+
+  div[data-testid="metric-container"] {
     border: 2.5px solid #000000 !important;
     border-radius: 12px !important;
     padding: 14px 20px !important;
@@ -77,7 +78,7 @@ div[data-testid="metric-container"] {
     margin: 4px 2px !important;
 }
 
-/* ── Section title inside each card ────────────────────────────────── */
+# ── Section title inside each card ────────────────────────────────── */
 .card-title {
     font-size: 1.1rem;
     font-weight: 700;
