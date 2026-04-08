@@ -30,7 +30,7 @@ st.title('📈 Live Stock Price Dashboard')
 tz = pytz.timezone('Asia/Kolkata') 
 now_time = pd.Timestamp.now(tz=tz).strftime("%H:%M:%S")
 
-st.caption(f'🚀 Last updated: {now_time} (IST) | Auto-refreshes every {refresh} min')
+st.caption(f'🚀 Last updated: {now_time} (IST) | Auto-refreshes every 30 min')
 # ────────────────────────────────────────────────────────────────────
 #st.caption(f'Auto-refreshes every 30 minutes. Last run: {pd.Timestamp.now().strftime("%H:%M:%S")}')
 
