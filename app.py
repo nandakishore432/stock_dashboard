@@ -186,26 +186,63 @@ fig_hm.update_layout(height=280)
 st.plotly_chart(fig_hm, use_container_width=True)
 
 # ── Anomaly Alerts Table ─────────────────────────────────────────────
-st.subheader('Anomaly Alerts (Z-Score > 2)')
+st.markdown('<div class="chart-card card-anomaly">', unsafe_allow_html=True)
+st.markdown('<div class="card-title">🚨 Anomaly Alerts (Z-Score > 2)</div>', unsafe_allow_html=True)
+
 alerts = []
 for sym in selected:
     df = data[sym].copy()
-    df['Z'] = (df['Daily_Return'] - df['Daily_Return'].mean()) / df['Daily_Return'].std()
-    flagged = df[abs(df['Z']) > 2][['Close','Daily_Return','Z']].copy()
-    flagged['Symbol'] = sym
-    flagged['Signal'] = flagged['Daily_Return'].apply(lambda x: '🔺 Surge' if x>0 else '🔻 Drop')
-    alerts.append(flagged)
+    if df.empty or len(df) < 2:
+        continue
+    
+    # Calculate Z-Score
+    std = df['Daily_Return'].std()
+    if std > 0:
+        df['Z'] = (df['Daily_Return'] - df['Daily_Return'].mean()) / std
+        flagged = df[abs(df['Z']) > 2][['Close','Daily_Return','Z']].copy()
+        flagged['Symbol'] = sym
+        flagged['Signal'] = flagged['Daily_Return'].apply(lambda x: '🔺 Surge' if x > 0 else '🔻 Drop')
+        alerts.append(flagged)
+
 if alerts:
     result = pd.concat(alerts).sort_index(ascending=False).head(20)
-    st.dataframe(result[['Symbol','Close','Daily_Return','Z','Signal']],
-                 use_container_width=True)
+    display_df = result[['Symbol','Close','Daily_Return','Z','Signal']]
+
+    # ── Styling the Table ─────────────────────────────────────────────
+    styled_table = display_df.style.set_table_styles([
+        # Header Styling: Bold text and Skyblue background
+        {'selector': 'th', 'props': [
+            ('background-color', '#87CEEB'), 
+            ('color', 'black'), 
+            ('font-weight', 'bold'),
+            ('border', '1px solid #0000FF')
+        ]},
+        # Body/Cell Styling: Blue borders
+        {'selector': 'td', 'props': [
+            ('border', '1px solid #0000FF')
+        ]},
+        # Entire Table Border
+        {'selector': '', 'props': [
+            ('border-collapse', 'collapse'),
+            ('width', '100%')
+        ]}
+    ]).format({
+        'Close': '${:.2f}',
+        'Daily_Return': '{:.2f}%',
+        'Z': '{:.2f}'
+    })
+
+    # Display the styled table
+    st.table(styled_table)
 else:
     st.success('No anomalies detected in the selected period.')
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 st.divider()
 st.markdown(
     f"<p style='text-align:center;font-family:{CLASSIC_FONT};color:#555;font-size:13px;'>"
-    "Data via Yahoo Finance (yfinance) · No API key required · "
+    "Data Source is: Yahoo Finance (yfinance) · No API key required · "
     "Built with Streamlit & Plotly</p>",
     unsafe_allow_html=True,
 )
