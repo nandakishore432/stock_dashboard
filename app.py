@@ -59,12 +59,11 @@ st.set_page_config(page_title='Stock Dashboard', layout='wide',  initial_sidebar
 st.markdown(
 <style>
 .chart-card {
-    border: 2.5px solid #000000;
-    border-radius: 14px;
-    padding: 20px 20px 8px 20px;
-    margin-bottom: 26px;
-    box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.18);
-}
+    border: 2.5px solid #000000,
+    border-radius: 14px,
+    padding: 20px 20px 8px 20px,
+    margin-bottom: 26px,
+    box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.18)}
 
 
 .card-kpi     { background-color: #dbeeff; }  /* sky blue   – KPI cards      */
