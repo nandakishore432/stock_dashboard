@@ -96,8 +96,8 @@ for sym in selected:
 fig_line.update_layout(hovermode='x unified', height=380)
 fig_line.update_layout(
     height=400,
-    paper_bgcolor='rgba(0,0,0,0)',
-    plot_bgcolor='rgba(0,0,0,0)',
+    paper_bgcolor='skyblue',
+    plot_bgcolor='lavender',
     margin=dict(l=10, r=10, t=10, b=10)
 )
 st.plotly_chart(fig_line, use_container_width=True)
