@@ -58,7 +58,6 @@ st.set_page_config(page_title='Stock Dashboard', layout='wide',  initial_sidebar
 # ── Global CSS ────────────────────────────────────────────────────────
 st.markdown(
 <style>
-/* Base card: thick black rounded border ──────────────────────────── */
 .chart-card {
     border: 2.5px solid #000000;
     border-radius: 14px;
@@ -67,7 +66,7 @@ st.markdown(
     box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.18);
 }
 
-/* ── Unique background per section ─────────────────────────────────── */
+
 .card-kpi     { background-color: #dbeeff; }  /* sky blue   – KPI cards      */
 .card-line    { background-color: #fef6e4; }  /* warm cream – line chart     */
 .card-candle  { background-color: #e8f8f0; }  /* mint green – candlestick    */
