@@ -239,25 +239,20 @@ fig_area.update_layout(height=300)
 st.plotly_chart(fig_area, use_container_width=True)
 
 # ── Chart: Heatmap — Weekly Return ────────────────────────────────────
-# 1. Custom Styled Card & Background
+# Ensure this matches your CSS classes defined at the top
 st.markdown('<div class="chart-card card-heatmap">', unsafe_allow_html=True)
 
-# 2. Icon + Gradient Title (Matched to "Live Updates" Style)
+# 1. Styled Gradient Title (Centered and Bold)
 st.markdown(
     """
     <div style="
         background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
         padding: 15px;
         border-radius: 12px;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         text-align: center;
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        gap: 15px;
     ">
-        <img src="data:image/png;base64,...YOUR_BASE64_ICON_HERE..." style="width: 40px; border-radius: 5px;" alt="Heatmap Icon">
         <h2 style="
             color: white; 
             font-family: 'Inter', sans-serif; 
@@ -267,21 +262,22 @@ st.markdown(
             text-transform: uppercase;
             font-size: 1.6rem;
         ">
-            RETURN HEATMAP (BY DAY)
+            🧮 RETURN HEATMAP (BY DAY)
         </h2>
     </div>
     """, 
     unsafe_allow_html=True
 )
 
-# Selector & Data Loading
-hm_sym = st.selectbox('Select Ticker focus', selected, key='hm')
-df_hm  = data[hm_sym].copy()
+# Selector for the user to pick which stock to analyze
+hm_sym = st.selectbox('Focus Ticker for Heatmap Analysis', selected, key='hm_select')
+df_hm = data[hm_sym].copy()
 
-# Ensure we have data and it's indexed properly
-if not df_hm.empty:
+if not df_hm.empty and 'Daily_Return' in df_hm.columns:
+    # Prepare data for the Heatmap
     df_hm['DayName'] = df_hm.index.strftime('%a')
-    df_hm['Week']    = df_hm.index.isocalendar().week.values
+    # Using %V for ISO week or %U for US week to ensure chronological order
+    df_hm['Week'] = df_hm.index.strftime('%U') 
     
     pivot = df_hm.pivot_table(
         values='Daily_Return', 
@@ -290,27 +286,32 @@ if not df_hm.empty:
         aggfunc='mean'
     )
     
-    # 3. New Color Palette & Custom Styling
-    # Changing 'RdYlGn' to a modern palette like 'Cividis' (or 'Plasma', 'Inferno')
+    # Reorder index to ensure Monday-Friday sequence
+    day_order = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+    pivot = pivot.reindex([d for d in day_order if d in pivot.index])
+
+    # 2. Modern Color Palette (Using 'Viridis' or 'Magma' for attractiveness)
     fig_hm = px.imshow(
         pivot, 
-        color_continuous_scale='Cividis', 
+        color_continuous_scale='Viridis', 
         aspect='auto',
-        labels={'color': 'Mean Return %'}
+        labels={'color': 'Avg Return %'},
+        template='plotly_white'
     )
-    
-    # Matching the Plotly layout to the container style
+
+    # 3. Transparent Layout to show the card background
     fig_hm.update_layout(
-        height=300,
-        margin=dict(l=0, r=0, t=10, b=0),
-        paper_bgcolor='rgba(0,0,0,0)',  # Makes plot background transparent
-        plot_bgcolor='rgba(0,0,0,0)'
+        height=320,
+        margin=dict(l=10, r=10, t=10, b=10),
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)',
+        xaxis_title="Week Number",
+        yaxis_title=""
     )
-    
-    # 4. Final Display inside styled container
+
     st.plotly_chart(fig_hm, use_container_width=True)
 else:
-    st.warning(f'No data available to build a heatmap for {hm_sym}.')
+    st.warning(f'Insufficient data to generate heatmap for {hm_sym}.')
 
 st.markdown('</div>', unsafe_allow_html=True)
 
