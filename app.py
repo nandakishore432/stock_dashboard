@@ -5,6 +5,23 @@ import pandas as pd
 import time
 from utils import get_stock_data, get_info, TICKERS
 
+# ── Classic font & color theme ─────────────────────────────
+CLASSIC_FONT = "Playfair Display, Georgia, 'Times New Roman', serif"
+BG_COLOR     = "#0e1117"
+CARD_BG      = "#1a1d2e"
+ACCENT       = "#c9a84c"
+GRID_COLOR   = "#2a2d3e"
+TEXT_COLOR   = "#e8e0d0"
+
+STOCK_COLORS = {
+    "AAPL" : "#4f8ef7",
+    "MSFT" : "#50C878",
+    "GOOGL": "#FF6B6B",
+    "AMZN" : "#FFD700",
+    "TSLA" : "#FF4500",
+    "NVDA" : "#9B59B6",
+}
+
 # ── Page Config ──────────────────────────────────────────────────────
 st.set_page_config(page_title='Stock Dashboard', layout='wide', page_icon='📈')
 st.title('📈 Live Stock Price Dashboard')
