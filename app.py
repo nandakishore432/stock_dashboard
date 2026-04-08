@@ -1,3 +1,11 @@
+"""
+============================================================
+  Live Stock Price Analytics Dashboard
+  Stack  : Python · Streamlit · Plotly · yfinance
+  Stocks : AAPL · MSFT · GOOGL · AMZN · TSLA · NVDA . META . NFL
+  No API key required — yfinance is completely free
+============================================================
+"""
 import streamlit as st
 import plotly.graph_objects as go
 import plotly.express as px
@@ -45,10 +53,10 @@ def get_info(ticker: str) -> dict:
 
 
 # ── Page Config ───────────────────────────────────────────────────────
-st.set_page_config(page_title='Stock Dashboard', layout='wide', page_icon='📈')
+st.set_page_config(page_title='Stock Dashboard', layout='wide',  initial_sidebar_state="expanded", page_icon='📈')
 
 # ── Global CSS ────────────────────────────────────────────────────────
-st.markdown("""
+st.markdown(
 <style>
 /* ── Base card: thick black rounded border ──────────────────────────── */
 .chart-card {
@@ -88,7 +96,7 @@ div[data-testid="metric-container"] {
     letter-spacing: 0.01em;
 }
 </style>
-""", unsafe_allow_html=True)
+, unsafe_allow_html=True)
 
 st.title('📈 Live Stock Price Dashboard')
 st.caption(f'Auto-refreshes every 30 minutes. Last run: {pd.Timestamp.now().strftime("%H:%M:%S")}')
