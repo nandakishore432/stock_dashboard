@@ -47,67 +47,16 @@ for i, sym in enumerate(selected):
 st.divider()
 
 # ── Chart 1: Line — 30-Day Price Trend ───────────────────────────────
-#st.subheader('30-Day Closing Price Trend')
-#fig_line = go.Figure()
-#for sym in selected:
-    #df = data[sym]
-   # fig_line.add_trace(go.Scatter(x=df.index, y=df['Close'], mode='lines', name=sym))
-  #  fig_line.add_trace(go.Scatter(x=df.index, y=df['7D_Avg'], mode='lines',
- #       name=f'{sym} 7D Avg', line=dict(dash='dot', width=1)))
-#fig_line.update_layout(hovermode='x unified', height=380)
-#st.plotly_chart(fig_line, use_container_width=True)
- # Custom CSS for the thick rounded border
-
-st.markdown("""
-    <style>
-    .chart-container {
-        border: 3px solid #F0F2F6; /* Improved thickness */
-        border-radius: 15px;      /* Rounded corners */
-        padding: 20px;
-        background-color: white;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# Wrap everything in the styled div
-with st.container():
-    st.markdown('<div class="chart-container">', unsafe_allow_html=True)
-    st.subheader('30-Day Closing Price Trend')
-    
-    fig_line = go.Figure()
-    
-    # Use a specific pale pink for the main line and a darker shade for the average
-    for sym in selected:
-        df = data[sym]
-        fig_line.add_trace(go.Scatter(
-            x=df.index, 
-            y=df['Close'], 
-            mode='lines', 
-            name=sym,
-            line=dict(color='#FFB6C1', width=3) # Light Pink
-        ))
-        fig_line.add_trace(go.Scatter(
-            x=df.index, 
-            y=df['7D_Avg'], 
-            mode='lines',
-            name=f'{sym} 7D Avg', 
-            line=dict(dash='dot', width=1, color='#FF69B4') # Hot Pink for contrast
-        ))
-
-    fig_line.update_layout(
-        template="plotly_white",
-        paper_bgcolor="rgba(0,0,0,0)", # Transparent to show container
-        plot_bgcolor="#FFF0F5",        # Pale Pink chart background
-        hovermode='x unified', 
-        height=380,
-        margin=dict(l=10, r=10, t=10, b=10),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-    )
-
-    st.plotly_chart(fig_line, use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-
+st.subheader('30-Day Closing Price Trend')
+fig_line = go.Figure()
+for sym in selected:
+    df = data[sym]
+    fig_line.add_trace(go.Scatter(x=df.index, y=df['Close'], mode='lines', name=sym))
+    fig_line.add_trace(go.Scatter(x=df.index, y=df['7D_Avg'], mode='lines',
+        name=f'{sym} 7D Avg', line=dict(dash='dot', width=1)))
+fig_line.update_layout(hovermode='x unified', height=380)
+st.plotly_chart(fig_line, use_container_width=True)
+ 
 # ── Chart 2: Candlestick — OHLC ──────────────────────────────────────
 st.subheader('Candlestick Chart (OHLC)')
 cs_sym = st.selectbox('Select ticker for candlestick', selected, key='cs')
