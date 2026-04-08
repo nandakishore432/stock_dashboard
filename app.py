@@ -55,40 +55,44 @@ def get_info(ticker: str) -> dict:
 # ── Page Config ───────────────────────────────────────────────────────
 st.set_page_config(page_title='Stock Dashboard', layout='wide',  initial_sidebar_state="expanded", page_icon='📈')
 
+import streamlit as st
+
 # ── Global CSS ────────────────────────────────────────────────────────
 st.markdown(
-<style>
-.card-kpi     { background-color: #dbeeff; }  /* sky blue   – KPI cards      */
-.card-line    { background-color: #fef6e4; }  /* warm cream – line chart     */
-.card-candle  { background-color: #e8f8f0; }  /* mint green – candlestick    */
-.card-bar     { background-color: #f4e8ff; }  /* lavender   – bar chart      */
-.card-scatter { background-color: #fff3e0; }  /* peach      – scatter        */
-.card-volume  { background-color: #e8eeff; }  /* periwinkle – volume area    */
-.card-heatmap { background-color: #fffde7; }  /* golden     – heatmap        */
-.card-anomaly { background-color: #fce8e8; }  /* blush red  – anomaly alerts */
+    """
+    <style>
+    /* Global Card Backgrounds */
+    .card-kpi     { background-color: #dbeeff; }  /* sky blue   – KPI cards      */
+    .card-line    { background-color: #fef6e4; }  /* warm cream – line chart     */
+    .card-candle  { background-color: #e8f8f0; }  /* mint green – candlestick    */
+    .card-bar     { background-color: #f4e8ff; }  /* lavender   – bar chart      */
+    .card-scatter { background-color: #fff3e0; }  /* peach      – scatter        */
+    .card-volume  { background-color: #e8eeff; }  /* periwinkle – volume area    */
+    .card-heatmap { background-color: #fffde7; }  /* golden     – heatmap        */
+    .card-anomaly { background-color: #fce8e8; }  /* blush red  – anomaly alerts */
 
-# ── KPI metric containers: individual black border ────────────────── 
-"""
-  div[data-testid="metric-container"] {
-    border: 2px solid #000000 !important;
-    border-radius: 12px !important;
-    padding: 14px 20px !important;
-    background-color: #ffffff;
-    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.13);
-    margin: 4px 2px !important;
-}"""
+    /* KPI metric containers: individual black border */
+    div[data-testid="metric-container"] {
+        border: 2px solid #000000 !important;
+        border-radius: 12px !important;
+        padding: 14px 20px !important;
+        background-color: #ffffff;
+        box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.13);
+        margin: 4px 2px !important;
+    }
 
-# ── Section title inside each card ────────────────────────────────── */
-.card-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #1a1a2e;
-    margin-bottom: 8px;
-    letter-spacing: 0.01em;
-}
-</style>
-, unsafe_allow_html=True)
-
+    /* Section title inside each card */
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 8px;
+        letter-spacing: 0.01em;
+    }
+    </style>
+    """, 
+    unsafe_allow_html=True
+)
 st.title('📈 Live Stock Price Dashboard')
 st.caption(f'Auto-refreshes every 30 minutes. Last run: {pd.Timestamp.now().strftime("%H:%M:%S")}')
 
