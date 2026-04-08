@@ -10,6 +10,45 @@ st.set_page_config(page_title='Stock Dashboard', layout='wide', page_icon='📈'
 st.title('📈 Live Stock Price Dashboard')
 st.caption(f'Auto-refreshes every 30 minutes. Last run: {pd.Timestamp.now().strftime("%H:%M:%S")}')
 
+# ── The "No-Fail" CSS ────────────────────────────────────────────────
+# This targets Streamlit's internal div structure directly
+st.markdown(
+    """
+    <style>
+    /* 1. Page Background */
+    .stApp { background-color: #f0f2f6; }
+
+    /* 2. Target every Streamlit Block to create the Card effect */
+    /* This ensures the border is actually AROUND the content */
+    [data-testid="stVerticalBlock"] > div:has(div.stPlotlyChart),
+    [data-testid="stVerticalBlock"] > div:has(div[data-testid="metric-container"]) {
+        background-color: white;
+        border: 2px solid #2d3436; /* Your 2px thickness requirement */
+        border-radius: 15px;      /* Your rounded requirement */
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    /* 3. Color variants for specific charts */
+    /* We use nth-of-type to color individual containers since we can't label them easily */
+    .main .block-container > div:nth-of-type(2) { background-color: #ffffff; } /* KPI */
+    .main .block-container > div:nth-of-type(3) { background-color: #fef6e4; } /* Line Chart */
+
+    /* 4. Formatting Titles */
+    .custom-title {
+        font-weight: 800;
+        font-size: 1.2rem;
+        color: #1a1a2e;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+    }
+    </style>
+    """, 
+    unsafe_allow_html=True
+)
+
 # ── Sidebar Controls ─────────────────────────────────────────────────
 with st.sidebar:
     st.header('Controls')
