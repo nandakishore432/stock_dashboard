@@ -184,10 +184,20 @@ fig_hm = px.imshow(pivot, color_continuous_scale='RdYlGn', aspect='auto',
                    labels={'color':'Return %'})
 fig_hm.update_layout(height=280)
 st.plotly_chart(fig_hm, use_container_width=True)
-
-# ── Anomaly Alerts Table ─────────────────────────────────────────────
+# ── Anomaly Alerts Section ────────────────────────────────────────────
 st.markdown('<div class="chart-card card-anomaly">', unsafe_allow_html=True)
-st.markdown('<div class="card-title">🚨 Anomaly Alerts (Z-Score > 2)</div>', unsafe_allow_html=True)
+
+# 1. Main Centered Title
+st.markdown(
+    """
+    <div style="text-align: center;">
+        <h2 style="font-weight: 800; color: #1a1a2e; margin-bottom: 20px;">
+            🚨 ANOMALY ALERTS (Z-SCORE > 2)
+        </h2>
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
 
 alerts = []
 for sym in selected:
@@ -195,7 +205,6 @@ for sym in selected:
     if df.empty or len(df) < 2:
         continue
     
-    # Calculate Z-Score
     std = df['Daily_Return'].std()
     if std > 0:
         df['Z'] = (df['Daily_Return'] - df['Daily_Return'].mean()) / std
@@ -208,23 +217,25 @@ if alerts:
     result = pd.concat(alerts).sort_index(ascending=False).head(20)
     display_df = result[['Symbol','Close','Daily_Return','Z','Signal']]
 
-    # ── Styling the Table ─────────────────────────────────────────────
+    # 2. Table Styling (Blue Lines + Skyblue Bold Headers)
     styled_table = display_df.style.set_table_styles([
-        # Header Styling: Bold text and Skyblue background
         {'selector': 'th', 'props': [
             ('background-color', '#87CEEB'), 
             ('color', 'black'), 
             ('font-weight', 'bold'),
-            ('border', '1px solid #0000FF')
+            ('border', '2px solid #0000FF'),
+            ('text-align', 'center')
         ]},
-        # Body/Cell Styling: Blue borders
         {'selector': 'td', 'props': [
-            ('border', '1px solid #0000FF')
+            ('border', '1px solid #0000FF'),
+            ('text-align', 'center'),
+            ('padding', '10px')
         ]},
-        # Entire Table Border
         {'selector': '', 'props': [
             ('border-collapse', 'collapse'),
-            ('width', '100%')
+            ('width', '100%'),
+            ('margin-left', 'auto'),
+            ('margin-right', 'auto')
         ]}
     ]).format({
         'Close': '${:.2f}',
@@ -232,8 +243,8 @@ if alerts:
         'Z': '{:.2f}'
     })
 
-    # Display the styled table
-    st.table(styled_table)
+    # Display using st.write to render the Styler object correctly
+    st.write(styled_table.to_html(), unsafe_allow_html=True)
 else:
     st.success('No anomalies detected in the selected period.')
 
