@@ -68,7 +68,7 @@ st.markdown(
 .card-anomaly { background-color: #fce8e8; }  /* blush red  – anomaly alerts */
 
 # ── KPI metric containers: individual black border ────────────────── 
-
+"""
   div[data-testid="metric-container"] {
     border: 2px solid #000000 !important;
     border-radius: 12px !important;
@@ -76,7 +76,7 @@ st.markdown(
     background-color: #ffffff;
     box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.13);
     margin: 4px 2px !important;
-}
+}"""
 
 # ── Section title inside each card ────────────────────────────────── */
 .card-title {
