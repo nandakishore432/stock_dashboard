@@ -76,7 +76,7 @@ st.markdown(
 # ── Sidebar Controls ─────────────────────────────────────────────────
 with st.sidebar:
     st.header('Controls')
-    selected = st.multiselect('Select Tickers', TICKERS, default=['AAPL','MSFT','TSLA'])
+    selected = st.multiselect('Select Tickers', TICKERS, default=['AAPL','MSFT','TSLA','NFLX'])
     period   = st.selectbox('Period', ['7d','14d','30d','90d'], index=2)
     interval = st.selectbox('Interval', ['1d','1h','5m'], index=0)
     refresh  = st.slider('Auto-refresh (min)', 5, 60, 30)
