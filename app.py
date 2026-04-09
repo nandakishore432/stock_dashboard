@@ -146,29 +146,29 @@ for i, sym in enumerate(selected):
         mkt_cap_str = "N/A"
     
     # ── Individual KPI Cards ──────────────────────────────────────────
-kpi_cols[i].markdown(
-    f"""
-    <div style="
-        background-color: #f3e5f5; 
-        border: 3px solid #2c3e50; 
-        border-radius: 12px; 
-        padding: 15px; 
-        text-align: center;
-        box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
-    ">
-        <h3 style="margin: 0; color: #1a1a2e; font-size: 1.2rem;">{sym}</h3>
-        <div style="font-size: 1.6rem; font-weight: 800; margin: 5px 0; color: #1a1a2e;">${cur:.2f}</div>
-        <div style="color: {color}; font-weight: 700; font-size: 1.1rem; margin-bottom: 10px;">
-            {symbol} {abs(chg):.2f} ({abs(pct):.2f}%)
+    kpi_cols[i].markdown(
+        f"""
+        <div style="
+            background-color: #f3e5f5; 
+            border: 3px solid #2c3e50; 
+            border-radius: 12px; 
+            padding: 15px; 
+            text-align: center;
+            box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+        ">
+            <h3 style="margin: 0; color: #1a1a2e; font-size: 1.2rem;">{sym}</h3>
+            <div style="font-size: 1.6rem; font-weight: 800; margin: 5px 0; color: #1a1a2e;">${cur:.2f}</div>
+            <div style="color: {color}; font-weight: 700; font-size: 1.1rem; margin-bottom: 10px;">
+                {symbol} {abs(chg):.2f} ({abs(pct):.2f}%)
+            </div>
+            <div style="text-align: left; font-size: 0.85rem; line-height: 1.8; border-top: 1px solid #d1c4e9; pt: 8px;">
+                <div style="display: flex; justify-content: space-between;"><b>High:</b> <span>${hi:.2f}</span></div>
+                <div style="display: flex; justify-content: space-between;"><b>Low:</b> <span>${lo:.2f}</span></div>
+                <div style="display: flex; justify-content: space-between;"><b>Volume:</b> <span>{vol/1e6:.1f}M</span></div>
+                <div style="display: flex; justify-content: space-between;"><b>Mkt Cap:</b> <span>{mkt_cap_str}</span></div>
+            </div>
         </div>
-        <div style="text-align: left; font-size: 0.85rem; line-height: 1.8; border-top: 1px solid #d1c4e9; pt: 8px;">
-            <div style="display: flex; justify-content: space-between;"><b>High:</b> <span>${hi:.2f}</span></div>
-            <div style="display: flex; justify-content: space-between;"><b>Low:</b> <span>${lo:.2f}</span></div>
-            <div style="display: flex; justify-content: space-between;"><b>Volume:</b> <span>{vol/1e6:.1f}M</span></div>
-            <div style="display: flex; justify-content: space-between;"><b>Mkt Cap:</b> <span>{mkt_cap_str}</span></div>
-        </div>
-    </div>
-    """,
+        """,
     unsafe_allow_html=True
 )
 st.divider()
