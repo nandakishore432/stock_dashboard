@@ -138,35 +138,13 @@ for i, sym in enumerate(selected):
     # Logic for Colors and Symbols
     color = "#27ae60" if chg >= 0 else "#e74c3c"  # Professional Green/Red
     symbol = "▲" if chg >= 0 else "▼"
-    
-@st.cache_data(ttl=300)
-def get_market_cap(sym):
+# Fetch Market Cap
     try:
-        t = yf.Ticker(sym)
-        
-        # Try fast_info first (lighter, more reliable)
-        mkt_cap = t.fast_info.get('marketCap', None)
-        
-        # Fallback to .info if fast_info didn't have it
-        if not mkt_cap:
-            mkt_cap = t.info.get('marketCap', None)
-        
-        if mkt_cap and mkt_cap > 0:
-            if mkt_cap >= 1e12:
-                return f"${mkt_cap / 1e12:.2f}T"
-            elif mkt_cap >= 1e9:
-                return f"${mkt_cap / 1e9:.2f}B"
-            else:
-                return f"${mkt_cap / 1e6:.2f}M"
-        return "N/A"
+        mkt_cap = yf.Ticker(sym).info.get('marketCap', 0)
+        mkt_cap_str = f"{mkt_cap / 1e9:.2f}B" if mkt_cap > 1e9 else f"{mkt_cap / 1e6:.2f}M"
+    except:
+        mkt_cap_str = "N/A"
     
-    except Exception as e:
-        st.warning(f"⚠️ Market cap error for {sym}: {e}")
-        return "N/A"
-
-# Usage
-mkt_cap_str = get_market_cap(sym)
-
     # ── Individual KPI Cards ──────────────────────────────────────────
 kpi_cols[i].markdown(
     f"""
