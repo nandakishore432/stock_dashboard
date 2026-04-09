@@ -139,7 +139,7 @@ for i, sym in enumerate(selected):
     color = "#27ae60" if chg >= 0 else "#e74c3c"  # Professional Green/Red
     symbol = "▲" if chg >= 0 else "▼"
     
-   @st.cache_data(ttl=300)
+@st.cache_data(ttl=300)
 def get_market_cap(sym):
     try:
         t = yf.Ticker(sym)
